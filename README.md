@@ -31,6 +31,11 @@ Install Django rest framework
   python -m pip install djangorestframework
 ```
 
+Install JWT Auth library
+```bash
+  python -m pip install djangorestframework-simplejwt
+```
+
 Run project
 ```bash
   python manage.py runserver

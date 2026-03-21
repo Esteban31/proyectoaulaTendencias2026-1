@@ -18,13 +18,15 @@ class Resource(models.Model):
     name = models.CharField(max_length=50)
     resourceType = models.CharField(
         choices=resourceType.choices,
-        null= True
+        null= True,
+        max_length=20
     )
     description = models.CharField(max_length=200)
     capacity = models.IntegerField()
     status = models.CharField(
         choices=status.choices,
-        null= True
+        null= True,
+        max_length=20
     )
     availableSchedule = models.JSONField()
 

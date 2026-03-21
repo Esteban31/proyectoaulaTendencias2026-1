@@ -14,7 +14,6 @@ def is_resource_available(resource, date, startAt, endsAt):
     if not day_schedule:
         return False, "No disponible ese día"
 
-    # ✅ convertir a int
     day_start = int(day_schedule["startAt"])
     day_end = int(day_schedule["endsAt"])
 
@@ -23,8 +22,9 @@ def is_resource_available(resource, date, startAt, endsAt):
 
     reservations = Reservation.objects.filter(
         resource=resource,
-        date=date
-    )
+        date=date,
+        status__in=['requested', 'confirmed']
+    )   
 
     for r in reservations:
         if not (endsAt <= r.startAt.hour or startAt >= r.endsAt.hour):

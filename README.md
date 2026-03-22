@@ -36,6 +36,12 @@ Install JWT Auth library
   python -m pip install djangorestframework-simplejwt
 ```
 
+
+Install Documentation Library
+```bash
+  pip install drf-spectacular
+```
+
 Run project
 ```bash
   python manage.py runserver

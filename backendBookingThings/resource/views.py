@@ -8,7 +8,7 @@ from .serializers import ResourceSerializer
 
 from .models import Reservation
 from .serializers import ReservationSerializer
-from .services import is_resource_available, promote_waitlist
+from .services import is_resource_available, promote_waitlist, sendFakeEmail, validate_cancel
 
 
 from rest_framework.decorators import action
@@ -100,22 +100,32 @@ class ReservationViewSet(viewsets.ModelViewSet):
         if not available:
             raise ValidationError({"detail": message})
 
-        serializer.save(user=self.request.user)
+        reservation = serializer.save(user=self.request.user)
+
+        if waitList == True:
+            sendFakeEmail(reservation, 'wait_list')
 
 
     def perform_update(self, serializer):
-        # 🔥 obtener estado anterior
         instance = self.get_object()
         old_status = instance.status
 
-        # guardar cambios
+        new_status = serializer.validated_data.get("status", old_status)
+
+        # if new_status == "cancelled":
+        #     validate_cancel(instance)
+
         updated_instance = serializer.save()
 
-        print(updated_instance.status)
-
-        # 🔥 detectar liberación de recurso
-        if (updated_instance.status == "cancelled" or updated_instance.status == "finished"):
+        # PROMOTE WAITLIST + EMAIL
+        if updated_instance.status in ["cancelled", "finished"]:
             promote_waitlist(updated_instance)
+            sendFakeEmail(updated_instance, 'cancelation')
+
+        # EMAIL CONFIRMATION
+        if updated_instance.status == "confirmed":
+            sendFakeEmail(updated_instance, 'confirmation')
+
 
 
         

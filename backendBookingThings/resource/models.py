@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 
 
+
 class resourceType(models.TextChoices):
         SALA = "sala", "SALA"
         EQUIPO = "equipo", "EQUIPO"
@@ -29,6 +30,10 @@ class Resource(models.Model):
         max_length=20
     )
     availableSchedule = models.JSONField()
+    miniumTimeToCancel = models.IntegerField(default=1)
+    
+    
+
 
 
 
@@ -50,7 +55,6 @@ class Reservation(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='requested')
     createdAt = models.DateTimeField(auto_now_add=True)
     waitList = models.BooleanField(default=False)
-    miniumTimeToCancel  = models.TimeField(default="01")
    
     
     def __str__(self):

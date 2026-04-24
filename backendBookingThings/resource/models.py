@@ -49,7 +49,9 @@ class Reservation(models.Model):
     reason = models.CharField(max_length=200)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='requested')
     createdAt = models.DateTimeField(auto_now_add=True)
+    waitList = models.BooleanField(default=False)
+    miniumTimeToCancel  = models.TimeField(default="01")
    
     
     def __str__(self):
-        return self.name
+        return f"{self.resource}"
